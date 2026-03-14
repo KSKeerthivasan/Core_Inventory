@@ -35,7 +35,7 @@ document.getElementById("validateBtn").addEventListener("click", async function(
 
     if(!deliveryId) return
 
-    const res = await fetch(API + "/deliveries/" + deliveryId + "/validate", {
+    const res = await fetch(API + "/deliveries/validate/" + deliveryId, {
         method: "POST"
     })
 

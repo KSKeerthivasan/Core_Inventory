@@ -33,7 +33,7 @@ document.getElementById("validateBtn").addEventListener("click", async function(
 
     if(!transferId) return
 
-    const res = await fetch(API + "/transfers/" + transferId + "/validate", {
+    const res = await fetch(API + "/transfers/validate/" + transferId, {
         method: "POST"
     })
 

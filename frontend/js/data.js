@@ -1,5 +1,3 @@
-const API = "http://127.0.0.1:8000"
-
 
 async function fetchData(endpoint){
     try{
@@ -22,7 +20,7 @@ async function fetchData(endpoint){
 
 async function loadProducts(){
 
-    const data = await fetchData("/products")
+    const data = await fetchData("/products/")
     const table = document.getElementById("productsTable")
 
     if(!table) return
@@ -47,7 +45,7 @@ async function loadProducts(){
 
 async function loadReceipts(){
 
-    const data = await fetchData("/receipts")
+    const data = await fetchData("/receipts/")
     const table = document.getElementById("receiptsTable")
 
     if(!table) return
@@ -70,7 +68,7 @@ async function loadReceipts(){
 
 async function loadDeliveries(){
 
-    const data = await fetchData("/deliveries")
+    const data = await fetchData("/deliveries/")
     const table = document.getElementById("deliveriesTable")
 
     if(!table) return
@@ -93,7 +91,7 @@ async function loadDeliveries(){
 
 async function loadTransfers(){
 
-    const data = await fetchData("/transfers")
+    const data = await fetchData("/transfers/")
     const table = document.getElementById("transfersTable")
 
     if(!table) return
@@ -117,7 +115,7 @@ async function loadTransfers(){
 
 async function loadAdjustments(){
 
-    const data = await fetchData("/adjustments")
+    const data = await fetchData("/adjustments/")
     const table = document.getElementById("adjustmentsTable")
 
     if(!table) return
