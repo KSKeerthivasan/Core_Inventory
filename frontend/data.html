@@ -1,0 +1,268 @@
+<script>
+const session = localStorage.getItem("session")
+if(!session){ window.location.href = "login.html" }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data — CoreInventory</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* CSS-only empty state for tables */
+  .data-table tbody:empty {
+    display: block;
+    width: 100%;
+  }
+  .data-table tbody:empty::after {
+    content: "No data available.";
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: var(--space-8) 0;
+    color: var(--gray-500);
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+</style>
+</head>
+
+<body>
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <h2><span class="logo-icon">📦</span> CoreInventory</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="sidebar-section-label">Overview</span>
+      <a href="dashboard.html" class="sidebar-link">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
+        Dashboard
+      </a>
+
+      <span class="sidebar-section-label">Inventory</span>
+      <a href="data.html" class="sidebar-link active">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Data
+      </a>
+      <a href="products.html" class="sidebar-link manager-only">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        Products
+      </a>
+      <a href="receipts.html" class="sidebar-link">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Receipts
+      </a>
+      <a href="deliveries.html" class="sidebar-link">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+        Deliveries
+      </a>
+      <a href="transfers.html" class="sidebar-link">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        Transfers
+      </a>
+      <a href="adjustments.html" class="sidebar-link manager-only">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+        Adjustments
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="#" class="sidebar-link" onclick="localStorage.removeItem('session'); window.location.href='login.html';">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <!-- Main Area -->
+  <div class="main-area">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <h1>Inventory Data</h1>
+          <span class="topbar-breadcrumb">Raw Data Tables</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user" style="position: relative;">
+          <button class="user-profile-btn" onclick="toggleUserDropdown(event)" id="userProfileBtn">
+            <div class="user-avatar" id="avatarInitial">U</div>
+            <svg class="dropdown-icon" id="dropdownIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <div class="dropdown-header">
+              <p class="dropdown-name" id="dropdownUserEmail">user@example.com</p>
+              <p class="dropdown-role" id="dropdownUserRole">Role</p>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item text-danger" onclick="localStorage.removeItem('session'); window.location.href='login.html';">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="main-content">
+
+      <!-- Products Card -->
+      <h2 class="manager-only" style="margin-bottom: var(--space-4); margin-top: 0;">Products</h2>
+      <div class="card manager-only" style="margin-bottom: var(--space-8);">
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Unit</th>
+                <th>Stock</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Receipts Card -->
+      <h2 style="margin-bottom: var(--space-4);">Receipts</h2>
+      <div class="card" style="margin-bottom: var(--space-8);">
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Supplier</th>
+                <th>Quantity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="receiptsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Deliveries Card -->
+      <h2 style="margin-bottom: var(--space-4);">Deliveries</h2>
+      <div class="card" style="margin-bottom: var(--space-8);">
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Quantity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="deliveriesTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Transfers Card -->
+      <h2 style="margin-bottom: var(--space-4);">Transfers</h2>
+      <div class="card" style="margin-bottom: var(--space-8);">
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Quantity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transfersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Adjustments Card -->
+      <h2 class="manager-only" style="margin-bottom: var(--space-4);">Adjustments</h2>
+      <div class="card manager-only" style="margin-bottom: var(--space-8);">
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody id="adjustmentsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  }
+
+  function toggleUserDropdown(e) {
+    if(e) e.stopPropagation();
+    document.getElementById('userDropdown').classList.toggle('show');
+    document.getElementById('userProfileBtn').classList.toggle('active');
+  }
+
+  document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('userDropdown');
+    const btn = document.getElementById('userProfileBtn');
+    if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+      dropdown.classList.remove('show');
+      btn.classList.remove('active');
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    try {
+      const sessionData = JSON.parse(localStorage.getItem('session'));
+      const roleStr = localStorage.getItem('role') || 'staff';
+      if (sessionData && sessionData.user && sessionData.user.email) {
+        const email = sessionData.user.email;
+        document.getElementById('dropdownUserEmail').textContent = email;
+        document.getElementById('avatarInitial').textContent = email.charAt(0).toUpperCase();
+      }
+      document.getElementById('dropdownUserRole').textContent = roleStr === 'admin' ? 'Inventory Manager' : 'Warehouse Staff';
+    } catch (e) {
+      console.error("Error loading user info", e);
+    }
+  });
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/data.js"></script>
+<script src="js/roleControl.js"></script>
+
+</body>
+</html>
